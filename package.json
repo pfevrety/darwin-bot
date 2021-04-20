@@ -1,0 +1,24 @@
+{
+  "name": "darwin-bot",
+  "version": "1.0.0",
+  "description": "A discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pfevrety/darwin-bot.git"
+  },
+  "author": "Eliott Fevret",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pfevrety/darwin-bot/issues"
+  },
+  "homepage": "https://github.com/pfevrety/darwin-bot#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0"
+  }
+}
