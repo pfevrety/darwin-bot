@@ -53,9 +53,7 @@ client.on('message', message => {
 		return message.reply('I can\'t execute that command inside DMs!');
     };
 
-    console.log(message.channel.author)
-
-    if (command.creator && message.channel.author == '404585725565337610')
+    if (command.creator && message.author.id == '404585725565337610')
 
     if (command.permissions) {
         const authorPerms = message.channel.permissionsFor(message.author);
