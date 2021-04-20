@@ -54,7 +54,7 @@ module.exports = {
         };
         
         let Owner;
-
+        const roles = message.guild.roles.cache.array().length <= 8 ? message.guild.roles.cache.array().slice(0, 8).join(', ') : message.guild.roles.cache.array().length > message.guild.roles.cache.array().slice(0, 8).length ? `${message.guild.roles.cache.array().slice(0, 8).join(', ')}, and ${message.guild.roles.cache.array().length - 8} more` : "None";
         try {
             owner = message.guild.owner.user.tag;
         } catch {
@@ -95,6 +95,12 @@ module.exports = {
                     name: "Roles Count: ",
                     value: `There are ${message.guild.roles.cache.size} roles in this server.`,
                     inline: true,
+                },
+                {
+                    name: "Roles: ",
+                    value: roles,
+                    inline: true
+
                 },
                 {
                     name: `🗺 Region: `,
