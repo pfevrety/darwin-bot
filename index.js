@@ -5,6 +5,7 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const AsciiTable = require('ascii-table')
 const chalk = require('chalk');
 
 const Token = process.env.TOKEN;
@@ -20,15 +21,26 @@ client.cooldowns = new Discord.Collection();
 console.log(chalk.blue("Lancement du programme du bot..."));
 
 const commandFolders = fs.readdirSync('./commands');
+let commandsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'))
+commandsTable.setHeading(chalk.blue('ID'), chalk.magenta('Commands'), chalk.green('Load status'), chalk.yellow('Description'));
+let counter = 0;
+
 
 for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
-		const command = require(`./commands/${folder}/${file}`);
-		client.commands.set(command.name, command);
-	}
+        const command = require(`./commands/${folder}/${file}`);
+        console.log(command)
+        try{
+            client.commands.set(command.name, command);
+            commandsTable.addRow(chalk.white(counter), chalk.white(prefix + command.name), chalk.green('✅ Load with success'), chalk.white(command.description));
+        }catch(error){
+            commandsTable.addRow(chalk.white(counter), chalk.white(prefix + command.name), chalk.red(`❌ Error ${error}`), chalk.white(command.description));
+        };	
+        counter ++;
+    }
 }
-
+console.log(commandsTable.toString())
 
 console.log(chalk.greenBright('Mise en cache des commandes réussie !'))
 
