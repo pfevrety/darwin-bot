@@ -15,19 +15,19 @@ module.exports = {
             return message.client.emojis.cache.get(id).toString();
         }
 
-        
+        console.log(user.presence.status)
         switch (user.presence.status) {
             case "online":
-                status = "<:online:729181184193462285> online";
+                status = "<:Online:834718808891457537> online";
                 break;
             case "dnd":
-                status = "<:dnd:729181212530442311> dnd";
+                status = "<:DND:834718618708738098> dnd";
                 break;
             case "idle":
-                status = "<:idle:729181121933475931> idle";
+                status = "<:Idle:834717874333548564> idle";
                 break;
             case "offline":
-                status = "emoji(729181121933475931)";
+                status = "<:Offline:834718288503898122> Offline";
                 break;
         };
 

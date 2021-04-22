@@ -5,6 +5,6 @@ module.exports = {
     description: 'Information about the creator website.',
     cooldown: 5,
 	execute(message, args) {
-        message.channel.send("eiio.dev");
+        message.channel.send("https://eiio.dev");
     }
 };
