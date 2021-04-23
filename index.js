@@ -7,6 +7,8 @@ dotenv.config();
 
 const AsciiTable = require('ascii-table')
 const chalk = require('chalk');
+const mongo = require('./mongo')
+
 
 const Token = process.env.TOKEN;
 
@@ -30,7 +32,6 @@ for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
         const command = require(`./commands/${folder}/${file}`);
-        console.log(command)
         try{
             client.commands.set(command.name, command);
             commandsTable.addRow(chalk.white(counter), chalk.white(prefix + command.name), chalk.green('✅ Load with success'), chalk.white(command.description));
@@ -45,7 +46,17 @@ console.log(commandsTable.toString())
 console.log(chalk.greenBright('Mise en cache des commandes réussie !'))
 
 client.once('ready', () => {
-	console.log(chalk.green("\nLa connection entre le bot et l'api Discord a été effectuée avec succès !"));
+    console.log(chalk.green("\nLa connection entre le bot et l'api Discord a été effectuée avec succès !"));
+    
+    mongo().then(mongoose => {
+        try {
+            console.log('connected mongo')
+        } catch (error) {
+            
+        } finally {
+            mongoose.connection.close()
+        }
+    })
 });
 
 client.on('message', message => {
