@@ -5,5 +5,5 @@ module.exports = async () => {
     await mongoose.connect(mongoPath, {
 
     });
-    return mongoose
+    return mongoose;
 }
