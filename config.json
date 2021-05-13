@@ -1,9 +1,0 @@
-{
-    "TOKEN": "NzYxNTk4MzkzMDA0NDU4MDA0.X3c7xg.wdCw9C9Jn5KYkHxYy3zf3DTGrWE",
-    "mongoPath": "mongodb://localhost:27017/discordBot",
-    "defaultConfig":{
-        "prefix": ".",
-        "logChannel": "bot-logs",
-        "welcomeMessage": "welcome {{ user }}"
-    }
-}
