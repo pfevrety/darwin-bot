@@ -1,130 +1,128 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
-
 const fs = require('fs');
-const dotenv = require('dotenv');
-dotenv.config();
-
-const AsciiTable = require('ascii-table')
+const AsciiTable = require('ascii-table');
 const chalk = require('chalk');
-const mongo = require('./mongo')
+const mongo = require('./mongo');
+const commandHandler = require('./middleware/handler')
+const {TOKEN} = require('./config.json');
+const client = new Discord.Client();
+const commandFolders = fs.readdirSync('./commands');
+const eventFolders = fs.readdirSync('./events')
+const { exec } = require('child_process');
+const handler = require('./middleware/handler')
+const { loadLanguages } = require('./middleware/language')
 
 
-const Token = process.env.TOKEN;
-
-const prefix = "."
 
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
 
-
 // Initialisation //
 
-console.log(chalk.blue("Lancement du programme du bot..."));
+console.log(chalk.blue('Lancement du programme du bot...'));
 
-const commandFolders = fs.readdirSync('./commands');
-let commandsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'))
-commandsTable.setHeading(chalk.blue('ID'), chalk.magenta('Commands'), chalk.green('Load status'), chalk.yellow('Description'));
-let counter = 0;
+    // exec('"C:\\\\Program Files\\\\MongoDB\\\\Server\\\\4.4\\bin\\\\mongod.exe" --dbpath="c:\\\\data\\\\db"');
 
 
-for (const folder of commandFolders) {
-	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
-	for (const file of commandFiles) {
-        const command = require(`./commands/${folder}/${file}`);
-        try{
-            client.commands.set(command.name, command);
-            commandsTable.addRow(chalk.white(counter), chalk.white(prefix + command.name), chalk.green('✅ Load with success'), chalk.white(command.description));
-        }catch(error){
-            commandsTable.addRow(chalk.white(counter), chalk.white(prefix + command.name), chalk.red(`❌ Error ${error}`), chalk.white(command.description));
-        };	
-        counter ++;
+let commandsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'));
+commandsTable.setHeading(
+    chalk.blue('ID'),
+    chalk.magenta('Commands'),
+    chalk.green('Load status'),
+    chalk.yellow('Description')
+);
+let commandCounter = 0;
+
+
+let eventsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'));
+eventsTable.setHeading(
+    chalk.blue('ID'),
+    chalk.magenta('Commands'),
+    chalk.green('Load status'),
+    chalk.yellow('Description')
+);
+let eventsCounter = 0;
+
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+for (const file of eventFiles) {
+    const event = require(`./events/${file}`);
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args, client));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args, client));
     }
 }
-console.log(commandsTable.toString())
 
-console.log(chalk.greenBright('Mise en cache des commandes réussie !'))
-
-client.once('ready', () => {
-    console.log(chalk.green("\nLa connection entre le bot et l'api Discord a été effectuée avec succès !"));
-    
-    mongo().then(mongoose => {
-        try {
-            console.log('connected mongo')
-        } catch (error) {
-            
-        } finally {
-            mongoose.connection.close()
+for (const folder of eventFolders) {
+    const eventFiles = fs.readdirSync(`./events/${folder}`).filter(file => file.endsWith('.js'));
+    for (const file of eventFiles) {
+        const event = require(`./events/${folder}/${file}`);
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args, client));
+        } else {
+            client.on(event.name, (...args) => event.execute(...args, client));
         }
-    })
-});
-
-client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-	const args = message.content.slice(prefix.length).trim().split(/ +/);
-	const commandName = args.shift().toLowerCase();
-
-    // Commande n'existe pas //
-
-	const command = client.commands.get(commandName)
-		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
-
-	if (!command) return message.channel.send("Cette commande n'existe pas. Tapez ${Prefix}help pour avoir la liste des commandes.");
-
-	if (command.guildOnly && message.channel.type === 'dm') {
-		return message.reply('I can\'t execute that command inside DMs!');
-    };
-
-    if (command.creator && message.author.id == '404585725565337610')
-
-    if (command.permissions) {
-        const authorPerms = message.channel.permissionsFor(message.author);
-        if (!authorPerms || !authorPerms.has(command.permissions)) {
-            return message.reply("Tu n'as pas la permission pour éxécuter cette commande !");
-        }
-    };
-
-    // Manque arguments //
-    if (command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`;
-
-        if (command.usage) {
-            reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-        };
-
-        return message.channel.send(reply)
-    };
-
-    const { cooldowns } = client;
-
-    if (!cooldowns.has(command.name)) {
-	    cooldowns.set(command.name, new Discord.Collection());
-    };
-
-    const now = Date.now();
-    const timestamps = cooldowns.get(command.name);
-    const cooldownAmount = (command.cooldown || 3) * 1000;
-
-    if (timestamps.has(message.author.id)) {
-	    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-        if (now < expirationTime) {
-            const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-        }
-    };
-
-    timestamps.set(message.author.id, now);
-    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
-
-    try {
-	    command.execute(message, args);
-    } catch (error) {
-	    console.log(chalk.red(error));
-	message.reply('there was an error trying to execute that command!');
+    }
 }
+
+
+
+// Ajout des toutes les commandes existantes //
+for (const folder of commandFolders) {
+    const commandFiles = fs.readdirSync(`./commands/${folder}`).filter((file) => file.endsWith('.js'));
+    for (const file of commandFiles) {
+        const command = require(`./commands/${folder}/${file}`);
+        try {
+            client.commands.set(command.name, command);
+            commandsTable.addRow(
+                chalk.white(commandCounter),
+                chalk.white("." + command.name),
+                chalk.green('✅ Load with success'),
+                chalk.white(command.description)
+            );
+        } catch (error) {
+            commandsTable.addRow(
+                chalk.white(commandCounter),
+                chalk.white("." + command.name),
+                chalk.red(`❌ Error ${error}`),
+                chalk.white(command.description)
+            );
+        }
+        commandCounter++;
+    }
+}
+
+console.log(commandsTable.toString());
+console.log(chalk.greenBright('Mise en cache des commandes réussie !'));
+console.log(eventsTable.toString());
+console.log(chalk.greenBright('Mise en cache des commandes réussie !'));
+
+
+// Quand le bot est connecté à Discord //
+client.on('ready', async () => {
+    console.log(chalk.green("\nLa connection entre le bot et l'api Discord a été effectuée avec succès !"));
+    await client.user.setUsername('Darwin');
+    await client.user.setActivity(`Watching`, { type: 'WATCHING' });
+        console.log(chalk.yellow('Connection to Mongo'));
+    // Connection à MongoDB //
+    await mongo().then((mongoose) => {
+        try {
+            console.log(chalk.yellow('Connected to Mongo'));
+        } catch (error) {
+        } finally {
+            mongoose.connection.close();
+        }
+    });
 });
 
-client.login(Token);
+// Handler pour les commandes //
+client.on('message', async (message) => {
+    if (message.author.bot) return;
+    await handler.loadPrefixes(message, client)
+    await loadLanguages(message, client)
+    commandHandler(message, message.client, Discord);
+});
+
+
+// Se connecte à l'api //
+client.login(TOKEN);
