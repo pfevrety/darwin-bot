@@ -1,5 +1,6 @@
 const math = require('mathjs');
 const { MessageEmbed } = require('discord.js');
+ const language = require('../../middleware/language')
 
 module.exports = {
   name: 'calc',
@@ -9,8 +10,11 @@ module.exports = {
   cooldown: 6,
   usage: '<calc>',
   execute(message, args) {
-    if (!args[0]) return message.channel.send("Merci d'entrez un calcul");
-    calcul = message.content.replace('.calc').replace('undefined', '');
+    const { guild } = message;
+
+    if (!args[0]) return message.channel.send(`${language(guild, 'CALCUL_ERROR')}`);
+    const calcul = args.join("")
+    let color;
     let res;
     try {
       res = math.evaluate(calcul);
@@ -23,7 +27,7 @@ module.exports = {
       .setColor(color)
       .setAuthor('Calcul')
       .addFields(
-        { name: 'Opération', value: '`' + calcul.replace(" ", "") + '`', inline: false },
+        { name: `${language(guild, 'CALCUL_OPERATION')}`, value: '`' + calcul.replace(" ", "") + '`', inline: false },
         { name: 'Résultat', value: '`' + res + '`', inline: false }
       )
       .setFooter(

@@ -1,6 +1,13 @@
-{
+  {
   "languages": ["french", "english"],
   "translations": {
-    
+    "CALCUL_OPERATION": {
+      "english": "Opperation",
+      "french": "Operation"
+    },
+    "CALCUL_ERROR": {
+      "english": "Merci d'entrez un calcul valabl",
+      "french": "Merci d'entrez un calcul valable"
+    }
   }
 }

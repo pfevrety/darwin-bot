@@ -102,7 +102,7 @@ module.exports = {
         )
         .setTimestamp()
         .setColor(roleColor);
-      return message.channel.send(embed);
+      message.channel.send(embed);
     }
   },
 };
