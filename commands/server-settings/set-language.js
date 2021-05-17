@@ -1,7 +1,9 @@
 const mongo = require('../../mongo');
-const languageSchema = require('../../schemas/language-schema');
+const guildSchema = require('../../schemas/guild-schema');
 const { languages } = require('./../../lang.json');
 const { setLanguage } = require('../../middleware/language')
+const language = require('../../middleware/language')
+
 
 
 module.exports = {
@@ -25,7 +27,7 @@ module.exports = {
 
         await mongo().then(async (mongoose) => {
             try {
-                await languageSchema.findOneAndUpdate(
+                await guildSchema.findOneAndUpdate(
                     {
                         _id: guild.id,
                     },
@@ -37,9 +39,7 @@ module.exports = {
                         upsert: true,
                     }
                 )
-
-                message.reply('Language set!').then((message) => {
-                })
+                message.reply(language(message.guild, "SET_LANGUAGE_SUCCEED").replace("{language}",targetLanguage))
             } finally {
                 await mongoose.connection.close()
             }

@@ -1,6 +1,7 @@
 const { Guild } = require('discord.js');
 const mongo = require('./../../mongo')
-const welcomeSchema = require('./../../schemas/welcome-schema')
+const guildSchema = require('../../schemas/guild-schema')
+const language = require('../../middleware/language')
 
 module.exports = {
     name: 'set-welcome',
@@ -15,16 +16,16 @@ module.exports = {
 
         await mongo().then(async (mongoose) => {
             try {
-                await welcomeSchema.findOneAndUpdate({
+                await guildSchema.findOneAndUpdate({
                     _id: message.guild.id
                 }, {
                     _id: message.guild.id,
-                        channelId: message.channel.id,
-                        text: args.join(' '),
+                        welcomeChannelId: message.channel.id,
+                        welcomeMessage: args.join(' '),
                 }, {
                    upsert: true, 
                 })
-                message.channel.send(`Le message de bienvenue à été modifié en : "${args.join(' ')}"`)
+                message.channel.send(language(message.guild, "SET_WELCOME_SUCCEED").replace("{newMessage}", args.join(' ')))
             } finally {
                 mongoose.connection.close()
             }
