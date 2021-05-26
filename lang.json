@@ -1,6 +1,10 @@
   {
   "languages": ["french", "english"],
   "translations": {
+    "COMMAND_SUCCESS": {
+      "french": "Commande effectuer avec success!",
+      "english": "Done!"
+    },
     "HANDLER_COMMAND_DOES_NOT_EXIST": {
       "english": "This command does not exist. Type ``{prefix}help`` to get the list of commands.",
       "french": "Cette commande n'existe pas. Tapez ``{prefix}help`` pour obtenir la liste des commandes."
@@ -64,6 +68,50 @@
     "CALCUL_ERROR": {
       "english": "Merci d'entrez un calcul valable",
       "french": "Merci d'entrez un calcul valable"
+    },
+    "CHANGE_STATUS_SUCCEED": {
+      "english": "Status changed to : ``{status}``!",
+      "french": "Status changé en : ``{status}``!"
+    },
+    "MUSIC_AUTOPLAY_SET": {
+      "english": "Set autoplay mode to : ",
+      "french": "Le mode de l'autoplay a été mit en : "
+    },
+    "MUSIC_JUMP_INVALID_SONG": {
+      "english": "Invalid song number.",
+      "french": "Numéro invalide"
+    },
+    "MUSIC_JUMP_SUCCEED": {
+      "english": "Change song succeed!",
+      "french": "Musique changer avec succes!"
+    },
+    "MUSIC_PLAY_NO_QUERY": {
+      "english": "Please enter a song url or query to search!",
+      "french": "Veuillez entrer une URL de chanson ou une requête à rechercher!"
+    },
+    "MUSIC_PLAY_ADD": {
+      "english": "Music add with success!",
+      "french": "Musique ajouté avec success!"
+    },
+    "MUSIC_QUEUE_CURRENT": {
+      "english": "Current queue:\n",
+      "french": "Queue actuel:\n"
+    },
+    "MUSIC_REPEAT_SET": {
+      "english": "Set repeat mode to:",
+      "french": "Mode de répétition:"
+    },
+    "MUSIC_SEEK_ERROR": {
+      "english": "Invalid song number.",
+      "french": "Moment invalid."
+    },
+    "MUSIC_STOP_SUCCEED": {
+      "english": "Stopped the queue!",
+      "french": "Queue arreté"
+    },
+    "MUSIC_VOLUME_SUCCEED": {
+      "english": "Volume set to ``{volume}``!",
+      "french": "Volume mit à ``{volume}``!"
     }
   }
 }
