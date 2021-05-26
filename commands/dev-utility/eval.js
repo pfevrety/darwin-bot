@@ -1,12 +1,12 @@
 
 module.exports = {
-	name: 'change-status',
-	description: 'Change the status of the bot',
+	name: 'eval',
+	description: 'eval a javascript iteration',
     args: true,
-    usage: 'welcome message',
+    usage: '<evalutaion>',
     creator: true,
     cooldown: 0,
     execute(message, args) {
-	        eval(args.join(" "))
+	        console.log(eval(args.join(" ")))
 	    },
 };
