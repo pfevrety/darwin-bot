@@ -1,8 +1,6 @@
 const mongo = require('../../mongo')
-const commandPrefixSchema = require('../../schemas/command-prefix-schema')
-
-// Importing command-base so we have access to the
-// "updateCache" function which I forgot to cover in the video
+const guildSchema = require('../../schemas/guild-schema')
+const language = require('../../middleware/language')
 const handler = require("../../middleware/handler");
 
 module.exports = {
@@ -17,7 +15,7 @@ module.exports = {
                 const guildId = message.guild.id
                 const prefix = args[0]
 
-                await commandPrefixSchema.findOneAndUpdate(
+                await guildSchema.findOneAndUpdate(
                     {
                         _id: guildId,
                     },
@@ -30,7 +28,7 @@ module.exports = {
                     }
                 )
 
-                message.reply(`The prefix for this bot is now ${prefix}`)
+                message.reply(language(message.guild, "SET_PREFIX_SUCCEED").replace("{prefix}", prefix))
 
                 // Update the cache
                 handler().updateCache(guildId, prefix)

@@ -14,6 +14,6 @@ module.exports = {
 
     if(!user.roles.cache.has(muteRole.id)) return message.channel.send(`<@${user.id}> n'est pas muté`)
     user.roles.remove(muteRole.id);
-    message.channel.send(`<@${user.id}> est démuté.`);
+    message.channel.send(language(message.guild, "UNMUTE_SUCCEED").replace("user", user.id));
     }
 };

@@ -3,12 +3,12 @@ const mongo = require('../mongo');
 const commandPrefixSchema = require('../schemas/command-prefix-schema');
 const guildPrefixes = {};
 const globalPrefix = ".";
+const language = require('../middleware/language')
 
 
-module.exports = (message, client, Discord) => {
+module.exports = (message, client, Discord, prefix, distube) => {
 
-    const prefix = guildPrefixes[message.guild.id] || globalPrefix
-
+    //const prefix = guildPrefixes[message.guild.id] || globalPrefix
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -21,12 +21,12 @@ module.exports = (message, client, Discord) => {
 
     if (!command)
         return message.channel.send(
-            `Cette commande n'existe pas. Tapez ${prefix} help pour avoir la liste des commandes.`
+            `${language(message.guild, 'HANDLER_COMMAND_DOES_NOT_EXIST').replace("{prefix}", prefix)}`
         );
 
     // Vérifie que la commande peut être exécuter dans les dm //
     if (command.guildOnly && message.channel.type === 'dm') {
-        return message.reply("I can't execute that command inside DMs!");
+        return message.reply(language(message.guild, 'HANDLER_COMMAND_NOT_IN_DM'));
     }
 
     if (command.creator && message.author.id === 404585725565337610)
@@ -36,17 +36,17 @@ module.exports = (message, client, Discord) => {
     if (command.permissions) {
         const authorPerms = message.channel.permissionsFor(message.author);
         if (!authorPerms || !authorPerms.has(command.permissions)) {
-            return message.reply("Tu n'as pas la permission pour éxécuter cette commande !");
+            return message.reply(language(message.guild, 'HANDLER_PERMISSION_DENIED'));
         }
     }
 
     // Manque arguments //
     if (command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`;
+        let reply = language(message.guild, 'HANDLER_LACK_OF_ARGUMENT_PART1');
         if (command.usage) {
-            reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+            reply += `${language(message.guild, 'HANDLER_LACK_OF_ARGUMENT_PART2')} \`${prefix}${command.name} ${command.usage}\``;
         }
-        return message.channel.send(reply);
+        return message.reply(reply);
     }
 
     // Gère un cooldowns //
@@ -62,12 +62,9 @@ module.exports = (message, client, Discord) => {
 
     if (timestamps.has(message.author.id)) {
         const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(
-                `please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`
-            );
+            return message.reply(language(message.guild, 'HANDLER_UNFINISHED_COOLDOWN').replace("{command}", command.name).replace("{time}", timeLeft.toFixed(1)));
         }
     }
 
@@ -75,29 +72,9 @@ module.exports = (message, client, Discord) => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-        command.execute(message, args);
+        command.execute(message, args, distube);
     } catch (error) {
         console.log(chalk.red(error));
-        message.reply('there was an error trying to execute that command!');
+        message.reply(language(message.guild, 'HANDLER_RUNTIME_ERROR'));
     }
-}
-
-module.exports.updateCache = (guildId, newPrefix) => {
-    guildPrefixes[guildId] = newPrefix
-}
-
-module.exports.loadPrefixes = async (message, client) => {
-    await mongo().then(async (mongoose) => {
-        try {
-            for (const guild of client.guilds.cache) {
-                const guildId = message.guild.id
-
-                const result = await commandPrefixSchema.findOne({_id: guildId})
-                guildPrefixes[guildId] = result.prefix;
-
-            }
-        } finally {
-            await mongoose.connection.close()
-        }
-    })
 }

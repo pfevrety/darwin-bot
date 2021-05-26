@@ -1,6 +1,6 @@
 const math = require('mathjs');
 const { MessageEmbed } = require('discord.js');
- const language = require('../../middleware/language')
+const language = require('../../middleware/language')
 
 module.exports = {
   name: 'calc',

@@ -11,6 +11,13 @@ const eventFolders = fs.readdirSync('./events')
 const { exec } = require('child_process');
 const handler = require('./middleware/handler')
 const { loadLanguages } = require('./middleware/language')
+const { guildSettings } = require('./middleware/serverSettings')
+const guildSchema = require('./schemas/guild-schema')
+const guildPrefixes = {};
+const globalPrefix = ".";
+const DisTube = require('distube')
+
+const distube = new DisTube(client)
 
 
 
@@ -118,9 +125,21 @@ client.on('ready', async () => {
 // Handler pour les commandes //
 client.on('message', async (message) => {
     if (message.author.bot) return;
-    await handler.loadPrefixes(message, client)
-    await loadLanguages(message, client)
-    commandHandler(message, message.client, Discord);
+    let settings;
+    await mongo().then(async (mongoose) => {
+        try {
+            const guildId = message.guild.id
+            settings = await guildSchema.findOne({
+                _id: guildId,
+            })
+        } finally {
+            mongoose.connection.close()
+        }
+    })
+    const prefix = settings.prefix || globalPrefix;
+    const language = settings.language || "english"
+    loadLanguages(message, language)
+    commandHandler(message, message.client, Discord, prefix, distube);
 });
 
 
