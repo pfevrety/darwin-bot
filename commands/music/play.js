@@ -1,15 +1,12 @@
+const language = require('../../middleware/language')
+
 module.exports = {
     name: 'play',
     aliases: ['music', 'p'],
     usage: '<url>',
     async execute(message, args, distube) {
         const string = args.join(" ")
-        if (!string) return message.channel.send(`Error | Please enter a song url or query to search.`)
-        try {
-            return distube.play(message, string)
-        } catch (e) {
-            console.log("e")
-            return message.reply(`\`\`${e}\`\``)
-        }
+        if (!string) return message.channel.send(`${language(message.guild, "MUSIC_PLAY_NO_QUERY")}`)
+        distube.play(message, string).then(message.channel.send(`${language(message.guild, "MUSIC_PLAY_ADD")}`))
     },
 };
