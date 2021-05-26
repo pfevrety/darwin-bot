@@ -5,6 +5,6 @@ module.exports = {
     execute(message, args, distube) {
         distube.stop(message, args.join(' '))
         distube.stop(message);
-        message.channel.send("Stopped the queue!");
+        message.channel.send(language(message.guild, "MUSIC_STOP_SUCCEED"));
     },
 };
