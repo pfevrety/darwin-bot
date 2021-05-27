@@ -9,9 +9,10 @@ module.exports = {
     description: 'Mute someone',
     cooldown: 1,
     usage: '<@pseudo> <time>',
+    permissions: ['MUTE_MEMBERS'],
     async execute(message, args) {
-        let user = message.guild.member(message.mentions.users.first());
-        let muteRole = message.guild.roles.cache.find(r => r.name === 'Muted');
+        let user = message.mentions.users.first();
+        let muteRole = message.guild.roles.cache.find(role => role.name === 'Muted');
         let muteTime = (args[1] || '5min')
 
         if (!muteRole) {
@@ -31,13 +32,14 @@ module.exports = {
             })
         }
         try {
-            await user.roles.add(muteRole.id);
+            await user.roles.add(muteRole);
             message.channel.send(language(message.guild, "MUTE_SUCCEED").replace("user", user.id).replace("{time}", ms(ms(muteTime))))
         } catch (e) {
+            console.log(e)
             message.channel.send(language(message.guild, "MUTE_FAILED"))
         }
         setTimeout(() => {
-            user.roles.remove(muteRole.id);
+            user.roles.remove(role);
         }, ms(muteTime));
     }
 };
