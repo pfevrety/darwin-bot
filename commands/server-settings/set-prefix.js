@@ -8,7 +8,7 @@ module.exports = {
     description: 'List all of my commands or info about a specific command.',
     aliases: ["prefix", "setprefix"],
     args: true,
-    permissions: 'ADMINISTRATOR',
+    permissions: ['ADMINISTRATOR'],
     async execute(message, args) {
         await mongo().then(async (mongoose) => {
             try {
