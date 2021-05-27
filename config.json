@@ -1,9 +1,6 @@
 {
-    "TOKEN": "NzYxNTk4MzkzMDA0NDU4MDA0.X3c7xg.",
+    "TOKEN": "ODQ3NDg2ODM1NTMzOTM4Njk4.YK-xnw.u3Rhf17eey5S-5wdBwnKqLynz3A",
     "mongoPath": "mongodb://localhost:27017/discordBot",
-    "defaultConfig":{
-        "prefix": ".",
-        "logChannel": "bot-logs",
-        "welcomeMessage": "welcome {{ user }}"
-    }
+    "USERNAME": "Darwin",
+    "ACTIVITY": "Regarde le tchat"
 }
