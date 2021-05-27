@@ -4,17 +4,14 @@ const AsciiTable = require('ascii-table');
 const chalk = require('chalk');
 const mongo = require('./mongo');
 const commandHandler = require('./middleware/handler')
-const {TOKEN} = require('./config.json');
+const { TOKEN, USERNAME, ACTIVITY} = require('./config.json');
 const client = new Discord.Client();
 const commandFolders = fs.readdirSync('./commands');
 const eventFolders = fs.readdirSync('./events')
-const { exec } = require('child_process');
 const handler = require('./middleware/handler')
 const { loadLanguages } = require('./middleware/language')
 const { guildSettings } = require('./middleware/serverSettings')
 const guildSchema = require('./schemas/guild-schema')
-const guildPrefixes = {};
-const globalPrefix = ".";
 const DisTube = require('distube')
 
 const distube = new DisTube(client)
@@ -28,7 +25,7 @@ client.cooldowns = new Discord.Collection();
 
 console.log(chalk.blue('Lancement du programme du bot...'));
 
-    // exec('"C:\\\\Program Files\\\\MongoDB\\\\Server\\\\4.4\\bin\\\\mongod.exe" --dbpath="c:\\\\data\\\\db"');
+// Activate mongodb => exec('"C:\\\\Program Files\\\\MongoDB\\\\Server\\\\4.4\\bin\\\\mongod.exe" --dbpath="c:\\\\data\\\\db"');
 
 
 let commandsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'));
@@ -39,16 +36,6 @@ commandsTable.setHeading(
     chalk.yellow('Description')
 );
 let commandCounter = 0;
-
-
-let eventsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'));
-eventsTable.setHeading(
-    chalk.blue('ID'),
-    chalk.magenta('Commands'),
-    chalk.green('Load status'),
-    chalk.yellow('Description')
-);
-let eventsCounter = 0;
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of eventFiles) {
@@ -101,17 +88,13 @@ for (const folder of commandFolders) {
 
 console.log(commandsTable.toString());
 console.log(chalk.greenBright('Mise en cache des commandes réussie !'));
-console.log(eventsTable.toString());
-console.log(chalk.greenBright('Mise en cache des commandes réussie !'));
-
 
 // Quand le bot est connecté à Discord //
 client.on('ready', async () => {
-    console.log(chalk.green("\nLa connection entre le bot et l'api Discord a été effectuée avec succès !"));
-    await client.user.setUsername('Darwin');
-    await client.user.setActivity(`Watching`, { type: 'WATCHING' });
-        console.log(chalk.yellow('Connection to Mongo'));
-    // Connection à MongoDB //
+    console.log(chalk.green("\Connection succeed!"));
+    await client.user.setUsername(USERNAME);
+    await client.user.setActivity(ACTIVITY);
+    // Connection to MongoDB //
     await mongo().then((mongoose) => {
         try {
             console.log(chalk.yellow('Connected to Mongo'));
