@@ -42,8 +42,8 @@
       "french": "<@user> a été muté pour {time}."
     },
     "MUTE_FAILED": {
-      "english": "User not found!",
-      "french": "Utilisateur non trouvé!"
+      "english": "Error try manualy!",
+      "french": "Il y a eut une erreur essayer manuellement!"
     },
     "UNMUTE_SUCCEED": {
       "english": "<@user> was unmute.",
@@ -112,6 +112,22 @@
     "MUSIC_VOLUME_SUCCEED": {
       "english": "Volume set to ``{volume}``!",
       "french": "Volume mit à ``{volume}``!"
+    },
+    "KICK_SUCCEED": {
+      "english": "User has been kicked!",
+      "french": "L'utilisateur a été kick!"
+    },
+    "KICK_FAILED": {
+      "english": "You couldt kick that member!",
+      "french": "Vous ne pouvez pas kick ce membre!"
+    },
+    "BAN_SUCCEED": {
+      "english": "User has been ban!",
+      "french": "L'utilisateur a été ban!"
+    },
+    "BAN_FAILED": {
+      "english": "You couldt ban that member!",
+      "french": "Vous ne pouvez pas ban ce membre!"
     }
   }
 }
