@@ -11,7 +11,8 @@ module.exports = {
     usage: '<@pseudo> <time>',
     permissions: ['MUTE_MEMBERS'],
     async execute(message, args) {
-        let user = message.mentions.users.first();
+        const user = message.mentions.users.first() || message.guild.members.cache.get(args[0])
+        if (!user) return message.channel.send("Invalid user.");
         let muteRole = message.guild.roles.cache.find(role => role.name === 'Muted');
         let muteTime = (args[1] || '5min')
 
@@ -32,6 +33,7 @@ module.exports = {
             })
         }
         try {
+            console.log(muteRole)
             await user.roles.add(muteRole);
             message.channel.send(language(message.guild, "MUTE_SUCCEED").replace("user", user.id).replace("{time}", ms(ms(muteTime))))
         } catch (e) {
