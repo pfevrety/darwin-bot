@@ -1,14 +1,9 @@
 const chalk = require("chalk");
-const mongo = require('../mongo');
-const commandPrefixSchema = require('../schemas/command-prefix-schema');
-const guildPrefixes = {};
-const globalPrefix = ".";
 const language = require('../middleware/language')
-
+const { PROPRIETOR } = require('../config.json')
 
 module.exports = (message, client, Discord, prefix, distube) => {
 
-    //const prefix = guildPrefixes[message.guild.id] || globalPrefix
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -29,7 +24,7 @@ module.exports = (message, client, Discord, prefix, distube) => {
         return message.reply(language(message.guild, 'HANDLER_COMMAND_NOT_IN_DM'));
     }
 
-    if (command.creator && message.author.id === 404585725565337610)
+    if (command.creator && message.author.id === PROPRIETOR)
         return message.channel.send('Cette commande ne peut être effectuer que par pfevrety#1908');
 
     // Vérifie que la commande ne néscéssite pas de Permissions //
@@ -74,7 +69,6 @@ module.exports = (message, client, Discord, prefix, distube) => {
     try {
         command.execute(message, args, distube);
     } catch (error) {
-        console.log(chalk.red(error));
-        message.reply(language(message.guild, 'HANDLER_RUNTIME_ERROR'));
+        message.reply(`${language(message.guild, 'HANDLER_RUNTIME_ERROR')}\n\`\`${error}\`\``);
     }
 }
