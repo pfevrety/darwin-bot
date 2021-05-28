@@ -19,6 +19,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
     "ascii-table": "0.0.9",
+    "canvacord": "^5.2.0",
     "chalk": "^4.1.0",
     "cpu-stat": "^1.0.0",
     "cpu-stats": "^1.0.0",
