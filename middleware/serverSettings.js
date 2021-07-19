@@ -1,7 +1,7 @@
 const mongo = require('../mongo')
 const guildSchema = require('../schemas/guild-schema')
 const lang = require('../lang.json')
-const guildPrefixes = require('./handler')
+const guildPrefixes = require('../handler/commandsExecutator')
 
 const guildLanguages = {}
 
