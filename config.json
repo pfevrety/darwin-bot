@@ -1,6 +1,11 @@
 {
-    "TOKEN": "ODQ3NDg2ODM1NTMzOTM4Njk4.YK-xnw.u3Rhf17eey5S-5wdBwnKqLynz3A",
-    "mongoPath": "mongodb://localhost:27017/discordBot",
-    "USERNAME": "Darwin",
-    "ACTIVITY": "Regarde le tchat"
+    "Username": "Darwin",
+    "Activity": "Regarde le tchat",
+    "color": {
+        "error" : "#d62828",
+        "permsArrived" : "#8ac926",
+        "internalError" : "#ffca3a",
+        "success" : "#1982c4"
+    },
+    "Owner": ""
 }
