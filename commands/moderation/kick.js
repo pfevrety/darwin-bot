@@ -10,7 +10,7 @@ module.exports = {
     usage: '<@pseudo> <time>',
     permissions: ['KICK_MEMBERS'],
     async execute(message, args) {
-        const target = message.mentions.users.first()
+        const target = message.mentions.members.last() || message.guild.members.cache.get(args[0]);
         if (target) {
             const targetMember = message.guild.members.cache.get(target.id)
             targetMember.kick()
