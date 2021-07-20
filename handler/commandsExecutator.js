@@ -66,7 +66,7 @@ module.exports = (message, client, Discord, prefix) => {
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-        command.execute(message, args, distube);
+        command.execute(message, args);
     } catch (error) {
         message.reply(`${language(message.guild, 'HANDLER_RUNTIME_ERROR')}\n\`\`${error}\`\``);
     }
