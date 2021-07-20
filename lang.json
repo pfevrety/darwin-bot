@@ -128,6 +128,14 @@
     "BAN_FAILED": {
       "english": "You couldt ban that member!",
       "french": "Vous ne pouvez pas ban ce membre!"
+    },
+    "CLEAR_SUCCEED": {
+      "english": "Successfully deleted **{msg}**!",
+      "french": "**{msg}** messages ont bien été supprimés avec succes!"
+    },
+    "UNBAN_SUCCEED": {
+      "english": "<@{user}> was unban!",
+      "french": "<@{user}> a été deban !"
     }
   }
 }
