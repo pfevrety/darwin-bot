@@ -3,12 +3,13 @@ const language = require('../../middleware/language')
 module.exports = {
     name: 'ban',
     args: true,
-    description: 'Ban someone',
-    cooldown: 1,
-    usage: '<@pseudo> <time>',
-    permissions: ['KICK_MEMBERS'],
+    description: 'Bans a specified user from your Discord server.',
+    cooldown: 0,
+    usage: '<user>',
+    permissions: ['BAN_MEMBERS'],
+    guildOnly: true,
     async execute(message, args) {
-        const target = message.mentions.users.first()
+        const target = message.mentions.members.last() || message.guild.members.cache.get(args[0]);
         if (target) {
             const targetMember = message.guild.members.cache.get(target.id)
             targetMember.ban()
