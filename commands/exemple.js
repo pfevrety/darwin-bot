@@ -7,6 +7,7 @@ module.exports = {
     cooldown: 15,
     args: true,
     owner: false,
+    guildOnly: true,
     execute(message, args) {
 
     },
