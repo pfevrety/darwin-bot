@@ -1,15 +1,14 @@
-const chalk = require("chalk");
 const language = require('../middleware/language')
-const { PROPRIETOR } = require('../config.json')
+const { Owner } = require('./../config.json')
 
-module.exports = (message, client, Discord, prefix, distube) => {
+module.exports = (message, client, Discord, prefix) => {
 
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    // Trouve le fichier .js pour la commande //
+    // Trouve le fichier .js pour la commande
     const command =
         client.commands.get(commandName) ||
         client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
@@ -19,15 +18,15 @@ module.exports = (message, client, Discord, prefix, distube) => {
             `${language(message.guild, 'HANDLER_COMMAND_DOES_NOT_EXIST').replace("{prefix}", prefix)}`
         );
 
-    // Vérifie que la commande peut être exécuter dans les dm //
+    // Vérifie que la commande peut être exécuter dans les dm
     if (command.guildOnly && message.channel.type === 'dm') {
         return message.reply(language(message.guild, 'HANDLER_COMMAND_NOT_IN_DM'));
     }
 
-    if (command.creator && message.author.id === PROPRIETOR)
+    if (command.owner && message.author.id === Owner)
         return message.channel.send('Cette commande ne peut être effectuer que par pfevrety#1908');
 
-    // Vérifie que la commande ne néscéssite pas de Permissions //
+    // Vérifie que la commande ne néscéssite pas de Permissions
     if (command.permissions) {
         const authorPerms = message.channel.permissionsFor(message.author);
         if (!authorPerms || !authorPerms.has(command.permissions)) {
@@ -60,15 +59,15 @@ module.exports = (message, client, Discord, prefix, distube) => {
         if (now < expirationTime) {
             const timeLeft = (expirationTime - now) / 1000;
             return message.reply(language(message.guild, 'HANDLER_UNFINISHED_COOLDOWN').replace("{command}", command.name).replace("{time}", timeLeft.toFixed(1)));
-        }
-    }
+        };
+    };
 
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
     try {
-        command.execute(message, args, distube);
+        command.execute(message, args);
     } catch (error) {
         message.reply(`${language(message.guild, 'HANDLER_RUNTIME_ERROR')}\n\`\`${error}\`\``);
     }
-}
+};

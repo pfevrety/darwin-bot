@@ -1,5 +1,5 @@
-const guildSchema = require("../../schemas/guild-schema");
-const mongo = require('../../mongo');
+const guildSchema = require("../schemas/guild-schema");
+const mongo = require('../mongo');
 
 module.exports = {
     name: 'guildCreate',

@@ -1,103 +1,42 @@
 const Discord = require('discord.js');
-const fs = require('fs');
-const AsciiTable = require('ascii-table');
-const chalk = require('chalk');
-const mongo = require('./mongo');
-const commandHandler = require('./middleware/handler')
-const { TOKEN, USERNAME, ACTIVITY} = require('./config.json');
+const fs = require('fs-extra');
 const client = new Discord.Client();
-const commandFolders = fs.readdirSync('./commands');
-const eventFolders = fs.readdirSync('./events')
-const handler = require('./middleware/handler')
-const { loadLanguages } = require('./middleware/language')
-const { guildSettings } = require('./middleware/serverSettings')
+
 const guildSchema = require('./schemas/guild-schema')
-const DisTube = require('distube')
 
-const distube = new DisTube(client)
+const { USERNAME, ACTIVITY } = require('./config.json');
 
 
+const commandExecutator = require('./handler/commandsExecutator')
+const events = require('./handler/eventsHandler');
+const commands = require("./handler/commandHandler");
+const mongo = require('./mongo');
+const { loadLanguages } = require('./middleware/language')
+
+require('dotenv').config()
 
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
 
 // Initialisation //
 
-console.log(chalk.blue('Lancement du programme du bot...'));
+console.log('Lancement du programme du bot...');
 
 // Activate mongodb => exec('"C:\\\\Program Files\\\\MongoDB\\\\Server\\\\4.4\\bin\\\\mongod.exe" --dbpath="c:\\\\data\\\\db"');
 
-
-let commandsTable = new AsciiTable(chalk.black.bgYellowBright('Commands'));
-commandsTable.setHeading(
-    chalk.blue('ID'),
-    chalk.magenta('Commands'),
-    chalk.green('Load status'),
-    chalk.yellow('Description')
-);
-let commandCounter = 0;
-
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-for (const file of eventFiles) {
-    const event = require(`./events/${file}`);
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args, client));
-    } else {
-        client.on(event.name, (...args) => event.execute(...args, client));
-    }
-}
-
-for (const folder of eventFolders) {
-    const eventFiles = fs.readdirSync(`./events/${folder}`).filter(file => file.endsWith('.js'));
-    for (const file of eventFiles) {
-        const event = require(`./events/${folder}/${file}`);
-        if (event.once) {
-            client.once(event.name, (...args) => event.execute(...args, client));
-        } else {
-            client.on(event.name, (...args) => event.execute(...args, client));
-        }
-    }
-}
-
-
-
-// Ajout des toutes les commandes existantes //
-for (const folder of commandFolders) {
-    const commandFiles = fs.readdirSync(`./commands/${folder}`).filter((file) => file.endsWith('.js'));
-    for (const file of commandFiles) {
-        const command = require(`./commands/${folder}/${file}`);
-        try {
-            client.commands.set(command.name, command);
-            commandsTable.addRow(
-                chalk.white(commandCounter),
-                chalk.white("." + command.name),
-                chalk.green('✅ Load with success'),
-                chalk.white(command.description)
-            );
-        } catch (error) {
-            commandsTable.addRow(
-                chalk.white(commandCounter),
-                chalk.white("." + command.name),
-                chalk.red(`❌ Error ${error}`),
-                chalk.white(command.description)
-            );
-        }
-        commandCounter++;
-    }
-}
-
-console.log(commandsTable.toString());
-console.log(chalk.greenBright('Mise en cache des commandes réussie !'));
+// Load Commands and Events
+commands.commandsFilterer(client, fs.readdirSync("./commands"));
+events.eventsFilterer(client);
 
 // Quand le bot est connecté à Discord //
 client.on('ready', async () => {
-    console.log(chalk.green("\Connection succeed!"));
+    console.log("Connection succeed!");
     await client.user.setUsername(USERNAME);
     await client.user.setActivity(ACTIVITY);
     // Connection to MongoDB //
     await mongo().then((mongoose) => {
         try {
-            console.log(chalk.yellow('Connected to Mongo'));
+            console.log('Connected to Mongo');
         } catch (error) {
         } finally {
             mongoose.connection.close();
@@ -120,11 +59,11 @@ client.on('message', async (message) => {
         }
     })
     const prefix = settings.prefix || globalPrefix;
-    const language = settings.language || "english"
-    loadLanguages(message, language)
-    commandHandler(message, message.client, Discord, prefix, distube);
+    const language = settings.language || "english";
+    loadLanguages(message, language);
+    commandExecutator(message, message.client, Discord, prefix);
 });
 
 
 // Se connecte à l'api //
-client.login(TOKEN);
+client.login(process.env.TOKEN);

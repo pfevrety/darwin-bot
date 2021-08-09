@@ -1,7 +1,7 @@
 const mongo = require('../../mongo')
 const guildSchema = require('../../schemas/guild-schema')
 const language = require('../../middleware/language')
-const handler = require("../../middleware/handler");
+const handler = require("../../handler/commandsExecutator");
 
 module.exports = {
     name: 'set-prefix',

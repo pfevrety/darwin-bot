@@ -20,6 +20,10 @@ module.exports = {
       let categories = [];
 
       readdirSync("./commands/").forEach((dir) => {
+        if (dir != "exemple.js"){
+          
+    
+
         const commands = readdirSync(`./commands/${dir}/`).filter((file) =>
           file.endsWith(".js")
         );
@@ -42,6 +46,7 @@ module.exports = {
         };
 
         categories.push(data);
+      }
       });
 
       const embed = new MessageEmbed()
