@@ -1,5 +1,5 @@
 import { Command, PieceContext } from '@sapphire/framework';
-import { MessageEmbed, CommandInteraction, Message, ColorResolvable, EmojiResolvable } from 'discord.js';
+import { MessageEmbed, Message, ColorResolvable, EmojiResolvable } from 'discord.js';
 
 module.exports = class PingCommand extends Command {
     constructor(context: PieceContext) {
