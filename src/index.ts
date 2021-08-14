@@ -6,4 +6,4 @@ const client = new SapphireClient({ intents: ['GUILDS', 'GUILD_MESSAGES'] });
 
 client.fetchPrefix = () => '!';
 
-client.login(process.env.TOKEN).then(() => console.log(client)).catch(console.error);
+client.login(process.env.TOKEN).then(() => console.log('Le bot est on')).catch(console.error);
