@@ -1,11 +1,13 @@
+/* eslint-disable curly */
+/* eslint-disable padding-line-between-statements */
 import { Command, PieceContext } from '@sapphire/framework';
-import { MessageEmbed, CommandInteraction, MessageButton, MessageActionRow, Message, ColorResolvable, EmojiResolvable } from 'discord.js';
+import { MessageEmbed, MessageButton, MessageActionRow, Message } from 'discord.js';
 
 module.exports = class PingCommand extends Command {
     constructor(context: PieceContext) {
         super(context, {
             aliases: ['k'],
-            description: 'Kick someones.',
+            description: 'Kick someone.',
             runIn: null,
             requiredClientPermissions: ['KICK_MEMBERS'],
         });
@@ -14,14 +16,13 @@ module.exports = class PingCommand extends Command {
     async run(message: Message): Promise<void> {
         const user = message.mentions.users.first();
         const reason = 'Lorem Ipsum dolor si amet dolor sit amet';
-        const description = 'Etes vous sur de vouloir bannir cette utilisateur ?';
 
         const embed = new MessageEmbed()
-            .setTitle(`Ban de <@${user.id}>`)
-            .setDescription(description)
+            .setTitle(`Kick de <@${user.id}>`)
+            .setDescription('Etes vous sur de vouloir bannir cette utilisateur ?')
             .addFields(
                 { name: 'Utilisateur', value: `<@${user.id}>` },
-                { name: 'Raison', value: '`' + reason + '`'},
+                { name: 'Raison', value: '`' + reason + '`' },
                 { name: 'Autheur', value: `<@${message.author.id}>` }
             )
             .setColor('#d62828')
@@ -39,11 +40,42 @@ module.exports = class PingCommand extends Command {
             .addComponents(
                 new MessageButton()
                     .setCustomId('ban')
-                    .setLabel('Bannir')
+                    .setLabel('Kick')
                     .setStyle('DANGER')
                     .setEmoji('💥')
             );
 
         const response = await message.channel.send({ embeds: [embed], components: [row] });
+
+        const filter = (interaction: any) => {
+            if (interaction.user.id === message.author.id) return true;
+            return interaction.reply({ content: 'Vous ne pouvez pas utiliser ce bouton' })
+        };
+
+        const collector = message.channel.createMessageComponentCollector({
+            filter,
+            max: 1,
+        });
+
+        collector.on('end', async (ButtonInteraction) => {
+            if (ButtonInteraction.first().customId === 'ban'){
+                try {
+                    message.guild.members.kick(user, reason || 'No reason');
+                    embed.setDescription('L\'utilisateur a été Kick !');
+                    response.react('💥');
+                    response.react('😱');
+                    return ButtonInteraction.first().reply({ embeds: [embed] });
+                } catch (e) {
+                    embed.setDescription(`Il y a eut une erreur ${e}.`);
+                    return ButtonInteraction.first().reply({ embeds: [embed] });
+                }
+            } else {
+                embed.setDescription('L\'utilisateur n\'a pas été Kick !');
+                embed.setColor('#8ac926');
+                response.react('☮️');
+                response.react('👍');
+                return ButtonInteraction.first().reply({ embeds: [embed] })
+            }
+        });
     }
 };
