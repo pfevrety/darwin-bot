@@ -1,0 +1,53 @@
+iste des commandes et catégories demandées
+
+-Préfix : b!
+-Token : ODM4MTE4MTAwMDI0ODE5NzMy.YI2cTg.4Vg5rERCwXZMlVs3ItQnvkSduHc
+
+- Modération : kick , ban , warn , tempban , unban , unmute , unbanall , mute , tempmute , allwarn , clear , banlist , move , setnick.
+
+- Music : leave , loop , lyrics , pause , play , queue , resume , skip , stop , volume , nowplaying , ,playlist , search , radio.
+
+- Utile : serverinfo , userinfo , say , ping , anime , manga , minecraftinfo , math ,  translate , wikipedia , fortnite , channelinfo , emoji , help , owner , roleinfo , annonce , embed.
+
+- Fun : 8ball , chinese , choose , flip , lovecalc , memes , octogone , mocking , rate.
+
+- Level : rank , level , leveltop , setlevel.
+
+- Social : baka , bang , bite , blush , confused , cookie , cry , cuddle , dab , dance , feed , greet , handholding , highfive , hug , insult , jojo , kiss , smile , punch , slap , wasted , bulma.
+
+- Giveaway : gstart , greroll , gend , gcreate , glist.
+
+- Economie : work , crime , slut , etop , deposit , recolt-income , bingo , egive.
+
+- Invitation : setwelcomemessage , setleavemessage , bump , vote , setcounteur , setimage.
+
+- Bot : botinvite.
+
+Source :
+
+Modération : https://koya.gg/commands
+Music : https://rythm.fm/docs/commands/
+Utile : https://koya.gg/commands
+Fun : https://koya.gg/commands
+Level : https://mee6.xyz/leveling
+Social : https://koya.gg/commands
+Giveaway : https://giveawaybot.party/
+Economie : https://unbelievaboat.com/commands
+Invitation : https://top.gg/bot/membercount
+Bot : Aucun
+Koya
+Discord bot made with ❤ by Koyamie.
+
+Commands | Rythm
+Always remember the following!
+MEE6 - The Discord Bot
+Manage your Discord server with leveling, moderation, Twitch, Youtube and Reddit notifications.
+
+Discord GiveawayBot
+GiveawayBot
+Hold giveaways on your Discord server quickly and easily!
+
+UnbelievaBoat - Discord Bot!
+Documentation on all of UnbelievaBoat's commands.
+
+Si ta des questions pour des commandes que tu trouve pas dans les sources bas mp moi je te dis sa et pour la limite tu a 2 semaine même au plus tard 3 semaine , quand le bot sera fini tu sera payé d'un nitro chaque moi , le bot doit être très beau surtout la commande help elle doit être rangé par catégorie et rangé dans l'ordre , ce bot me servira a avoir le grade certifié et pour un autre grand projet , une fois le bot terminé tu devra aussi me le mettre en lien médiafire sans trojan ou token graber bien sûr , et me l'envoyer pour que je télécharge le bot , le bot doit  être héberger h24 7/7j , si ta des autres question mes mp sont ouvert , Good Luck.
