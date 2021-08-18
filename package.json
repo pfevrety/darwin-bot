@@ -1,18 +1,47 @@
 {
   "name": "darwin-bot",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT", 
+  "version": "4.0.0",
+  "description": "Darwin bot",
+  "main": "dist/sharder.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "build": "node index.js",
+    "start": "tsc && node .",
+    "watch": "npx tsc --project tsconfig.json -w",
+    "register-commands-dev": "node dist/command-registration.js",
+    "register-commands-prod": "node dist/command-registration.js prod",
+    "rcd": "npm run register-commands-dev",
+    "rcp": "npm run register-commands-prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "description": "",
+  "keywords": [
+    "discord",
+    "bot",
+    "discord.js",
+    "sapphire"
+  ],
+  "author": "pfevrety",
+  "license": "ISC",
   "dependencies": {
-    "discord.js": "13.0.1",
-    "discord-akairo": "github:SkyBlockDev/discord-akairo"
+    "@sapphire/fetch": "^1.0.5",
+    "@sapphire/framework": "next",
+    "@types/node": "^16.4.13",
+    "@types/node-fetch": "^2.5.12",
+    "@types/sqlite3": "^3.1.7",
+    "discord-api-types": "^0.22.0",
+    "discord.js": "^13",
+    "dotenv": "^10.0.0",
+    "path": "^0.12.7",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "@sapphire/eslint-config": "^3.2.3",
+    "@sapphire/prettier-config": "^1.1.6",
+    "@sapphire/ts-config": "^3.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-jsdoc": "^36.0.6",
+    "jest": "^27.0.6",
+    "typescript": "^4.3.5",
+    "typescript-eslint": "^0.0.1-alpha.0"
   }
 }
