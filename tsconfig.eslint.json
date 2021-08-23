@@ -1,9 +1,0 @@
-{
-    "extends": "@sapphire/ts-config",
-    "compilerOptions": {
-        "lib": ["ESNext", "DOM"],
-        "target": "ESNext",
-        "module": "ESNext"
-    },
-    "include": ["src"]
-}
