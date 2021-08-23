@@ -1,6 +1,6 @@
-.env
 node_modules
 package-lock.json
-.idea
-.vscode
-dist
+.DS_Store
+yarn.lock
+config.json
+*.lock
