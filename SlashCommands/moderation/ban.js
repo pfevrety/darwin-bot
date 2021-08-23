@@ -1,21 +1,21 @@
-/* eslint-disable curly */
-/* eslint-disable padding-line-between-statements */
-import { Command, PieceContext } from '@sapphire/framework';
-import { MessageEmbed, MessageButton, MessageActionRow, Message } from 'discord.js';
+const {
+    MessageEmbed,
+    MessageActionRow,
+    MessageButton
+} = require("discord.js");
 
-module.exports = class PingCommand extends Command {
-    constructor(context: PieceContext) {
-        super(context, {
-            aliases: ['b'],
-            description: 'ban someone.',
-            runIn: null,
-            requiredClientPermissions: ['BAN_MEMBERS'],
-        });
-    }
-
-    async run(message: Message): Promise<void> {
-        const user = message.mentions.users.first();
-        const reason = 'Lorem Ipsum dolor si amet dolor sit amet';
+module.exports = {
+    name: "ban",
+    description: "ban someone",
+    type: "CHAT_INPUT",
+    /**
+     *
+     * @param {CommandInteraction} interaction
+     * @param {String[]} args
+     */
+    run: async (interaction, args) => {
+        const user = interaction.user;
+        const reason = "Lorem Ipsum dolor si amet dolor sit amet";
 
         const embed = new MessageEmbed()
             .setTitle(`Ban de <@${user.id}>`)
@@ -23,7 +23,7 @@ module.exports = class PingCommand extends Command {
             .addFields(
                 { name: 'Utilisateur', value: `<@${user.id}>` },
                 { name: 'Raison', value: '`' + reason + '`' },
-                { name: 'Autheur', value: `<@${message.author.id}>` }
+                { name: 'Autheur', value: `<@${interaction.user.id}>` }
             )
             .setColor('#d62828')
             .setTimestamp()
@@ -45,37 +45,37 @@ module.exports = class PingCommand extends Command {
                     .setEmoji('💥')
             );
 
-        const response = await message.channel.send({ embeds: [embed], components: [row] });
+        const response = await interaction.followUp({ embeds: [embed], components: [row] });
 
-        const filter = (interaction: any) => {
-            if (interaction.user.id === message.author.id) return true;
-            return interaction.reply({ content: 'Vous ne pouvez pas utiliser ce bouton' })
+        const filter = (interaction) => {
+            if (interaction.user.id === interaction.user.id) return true;
+            return interaction.user.send({ content: 'Vous ne pouvez pas utiliser ce bouton' })
         };
 
-        const collector = message.channel.createMessageComponentCollector({
+        const collector = interaction.channel.createMessageComponentCollector({
             filter,
             max: 1,
         });
 
         collector.on('end', async (ButtonInteraction) => {
-            if (ButtonInteraction.first().customId === 'ban'){
+            if (ButtonInteraction.first().customId === 'ban') {
                 try {
-                    message.guild.members.ban(user, { reason : reason || 'No reason' });
+                    interaction.guild.members.ban(user, { reason: reason || 'No reason' });
                     embed.setDescription('L\'utilisateur a été Banni !');
                     response.react('💥');
                     response.react('😱');
-                    return ButtonInteraction.first().reply({ embeds: [embed] });
+                    return response.edit({ embeds: [embed] });
                 } catch (e) {
                     embed.setDescription(`Il y a eut une erreur ${e}.`);
-                    return ButtonInteraction.first().reply({ embeds: [embed] });
+                    return response.edit({ embeds: [embed] });
                 }
             } else {
                 embed.setDescription('L\'utilisateur n\'a pas été Banni !');
                 embed.setColor('#8ac926');
                 response.react('☮️');
                 response.react('👍');
-                return ButtonInteraction.first().reply({ embeds: [embed] })
+                return response.edit({ embeds: [embed] })
             }
         });
-    }
+    },
 };
