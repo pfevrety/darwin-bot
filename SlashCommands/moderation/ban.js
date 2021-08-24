@@ -7,18 +7,42 @@ const {
 module.exports = {
     name: "ban",
     description: "ban someone",
-    type: "CHAT_INPUT",
+    type: 1,
+    options: [
+        {
+            name: "target",
+            description: "The ban target",
+            type: 6,
+            required: true,
+            choices: []
+        },
+        {
+            name: "reason",
+            description: "The reason of the ban",
+            type: 3,
+            required: false,
+            choices: []
+        },
+        {
+            name: "time",
+            description: "The ban time",
+            type: 10,
+            required: false,
+            choices: []
+        },
+
+    ],
     /**
      *
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
     run: async (interaction, args) => {
-        const user = interaction.user;
-        const reason = "Lorem Ipsum dolor si amet dolor sit amet";
+        const user = interaction.options.getUser('target');
+        const reason = interaction.options.getString('reason') === null ? "Lorem ipsum dolor sit amet" : interaction.options.getString('reason');
 
         const embed = new MessageEmbed()
-            .setTitle(`Ban de <@${user.id}>`)
+            .setTitle(`Ban de ${user.username}#${user.tag}!`)
             .setDescription('Etes vous sur de vouloir bannir cette utilisateur ?')
             .addFields(
                 { name: 'Utilisateur', value: `<@${user.id}>` },
@@ -49,7 +73,7 @@ module.exports = {
 
         const filter = (interaction) => {
             if (interaction.user.id === interaction.user.id) return true;
-            return interaction.user.send({ content: 'Vous ne pouvez pas utiliser ce bouton' })
+            return interaction.reply({ content: 'Vous ne pouvez pas utiliser ce bouton', ephemeral: true });
         };
 
         const collector = interaction.channel.createMessageComponentCollector({
@@ -64,17 +88,17 @@ module.exports = {
                     embed.setDescription('L\'utilisateur a été Banni !');
                     response.react('💥');
                     response.react('😱');
-                    return response.edit({ embeds: [embed] });
+                    return ButtonInteraction.first().update({ embeds: [embed], components: [] });
                 } catch (e) {
                     embed.setDescription(`Il y a eut une erreur ${e}.`);
-                    return response.edit({ embeds: [embed] });
+                    return ButtonInteraction.first().update({ embeds: [embed], components: [] });
                 }
             } else {
                 embed.setDescription('L\'utilisateur n\'a pas été Banni !');
                 embed.setColor('#8ac926');
                 response.react('☮️');
                 response.react('👍');
-                return response.edit({ embeds: [embed] })
+                return ButtonInteraction.first().update({ embeds: [embed], components: [] });
             }
         });
     },
