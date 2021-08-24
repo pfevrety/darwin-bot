@@ -40,7 +40,7 @@ module.exports = {
         embed.setDescription(`***Calcul du ping...***\n\uD83D\uDC77 Ping du bot: \`\`${latency}\`\`.\n⚙ Ping lantence de l'API discord: \`\`${botPing}\`\`.`)
         embed.setColor(color);
 
-        response.edit({ embeds: [embed] });
+        interaction.editReply({ embeds: [embed] });
         response.react(emoji);
 
     },
