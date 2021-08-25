@@ -7,7 +7,7 @@ const {
 module.exports = {
     name: "kick",
     type: 1,
-    description: "Send a random adorable animal photo",
+    description: "Kick someone",
     options: [
         {
             name: "target",
