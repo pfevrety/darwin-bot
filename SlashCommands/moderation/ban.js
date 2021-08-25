@@ -25,8 +25,8 @@ module.exports = {
         },
         {
             name: "time",
-            description: "The ban time",
-            type: 10,
+            description: "The ban time in days",
+            type: 4,
             required: false,
             choices: []
         },
@@ -39,7 +39,9 @@ module.exports = {
      */
     run: async (interaction, args) => {
         const user = interaction.options.getUser('target');
-        const reason = interaction.options.getString('reason') === null ? "Lorem ipsum dolor sit amet" : interaction.options.getString('reason');
+        const reason = interaction.options.getString('reason') === null ? "Non donnée" : interaction.options.getString('reason');
+
+        const time = interaction.options.getInteger('time') === null ? 0 : interaction.options.getInteger('time') % 7;
 
         const embed = new MessageEmbed()
             .setTitle(`Ban de ${user.username}#${user.tag}!`)
@@ -47,6 +49,7 @@ module.exports = {
             .addFields(
                 { name: 'Utilisateur', value: `<@${user.id}>` },
                 { name: 'Raison', value: '`' + reason + '`' },
+                { name: 'Durée', value: "``" + time === 0 ? "Définitif" : `${time} days` + "``"},
                 { name: 'Autheur', value: `<@${interaction.user.id}>` }
             )
             .setColor('#d62828')
@@ -84,7 +87,7 @@ module.exports = {
         collector.on('end', async (ButtonInteraction) => {
             if (ButtonInteraction.first().customId === 'ban') {
                 try {
-                    interaction.guild.members.ban(user, { reason: reason || 'No reason' });
+                    interaction.guild.members.ban(user, { reason, days: time});
                     embed.setDescription('L\'utilisateur a été Banni !');
                     response.react('💥');
                     response.react('😱');
