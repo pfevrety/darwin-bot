@@ -67,7 +67,7 @@ module.exports = {
         }
 
         const embed = new MessageEmbed()
-            .setTitle(`Mute de ${user.username}#${user.tag}!`)
+            .setTitle(`Mute de ${user.user.username}#${user.user.tag}!`)
             .setDescription("Un utilisateur a été mute !")
             .addFields(
                 { name: "Utilisateur", value: `<@${user.id}>` },
