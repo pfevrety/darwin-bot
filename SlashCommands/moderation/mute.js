@@ -74,7 +74,7 @@ module.exports = {
                 { name: "Raison", value: "`" + reason + "`" },
                 {
                     name: "Durée",
-                    value: "``" + time || "Infinie" + "``",
+                    value: `\`\`${time || "Infinie"}\`\``
                 },
                 { name: "Autheur", value: `<@${interaction.user.id}>` }
             )
