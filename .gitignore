@@ -8,3 +8,4 @@ config.json
 *.lock
 dist
 .env
+yarn.lock
