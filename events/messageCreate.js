@@ -3,23 +3,11 @@ const client = require("../index");
 client.on("messageCreate", async (message) => {
     if (message.author.bot || !message.guild) return;
 
-    let hasLeveledUp;
-    try {
-        hasLeveledUp = await message.client.Levels.appendXp(
-            message.author.id,
-            message.guild.id,
-            10
-        );
-    } catch {
-        message.client.Levels.createUser(message.author.id, message.guild.id);
-        hasLeveledUp = await message.client.Levels.appendXp(
-            message.author.id,
-            message.guild.id,
-            5
-        ).catch((e) => {
-            console.log(e);
-        });
-    }
+    const hasLeveledUp = await message.client.Levels.appendXp(
+        message.author.id,
+        message.guild.id,
+        9
+    );
 
     if (hasLeveledUp) {
         const user = await message.client.Levels.fetch(
