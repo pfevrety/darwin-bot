@@ -4,10 +4,10 @@ const { MessageAttachment } = require("discord.js");
 module.exports = {
     name: "level",
     type: 1,
-    description: "clear messages",
+    description: "Get level",
     options: [
         {
-            name: "author",
+            name: "target",
             description: "the level of the user",
             type: 6,
             required: false,
@@ -16,13 +16,17 @@ module.exports = {
     ],
 
     /**
-     *
      * @param {CommandInteraction} interaction
-     * @param {String[]} args
      */
-    run: async (interaction, args) => {
+    run: async (interaction) => {
         const user =
-            interaction.options.getMember("author") || interaction.member;
+            interaction.options.getMember("target") || interaction.member;
+
+        console.log(interaction.member);
+
+        console.log(
+            await interaction.guild.members.cache.get(interaction.user.id)
+        );
 
         let level = await interaction.client.Levels.fetch(
             user.user.id,
@@ -48,7 +52,7 @@ module.exports = {
             .setRequiredXP(user.client.Levels.xpFor(level.level + 1)) // We calculate the required Xp for the next level
             .setRank(level.position) // Position of the user on the leaderboard
             .setLevel(level.level) // Current Level of the user
-            .setStatus(user.presence.status) // Current Status of the user
+            .setStatus('offline' === null ? 'offline' : user.presence.status) // Current Status of the user
             .setProgressBar("#FFFFFF")
             .setUsername(user.user.username)
             .setDiscriminator(user.user.discriminator);
