@@ -8,6 +8,7 @@ module.exports = {
     name: "kick",
     type: 1,
     description: "Kick someone",
+    userPermissions: ["KICK_MEMBERS"],
     options: [
         {
             name: "target",
