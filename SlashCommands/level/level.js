@@ -22,12 +22,6 @@ module.exports = {
         const user =
             interaction.options.getMember("target") || interaction.member;
 
-        console.log(interaction.member);
-
-        console.log(
-            await interaction.guild.members.cache.get(interaction.user.id)
-        );
-
         let level = await interaction.client.Levels.fetch(
             user.user.id,
             interaction.guild.id,
