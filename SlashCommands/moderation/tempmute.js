@@ -4,6 +4,7 @@ module.exports = {
     name: "tempmute",
     description: "tempmute someone",
     type: 1,
+    userPermissions: ["MANAGE_ROLES"],
     options: [
         {
             name: "target",
