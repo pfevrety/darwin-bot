@@ -8,6 +8,7 @@ module.exports = {
     name: "clear",
     type: 1,
     description: "clear messages",
+    userPermissions: ["MANAGE_MESSAGES"],
     options: [
         {
             name: "amout",
