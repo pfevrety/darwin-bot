@@ -7,6 +7,7 @@ const {
 module.exports = {
     name: "purge",
     type: 1,
+    userPermissions: ["MANAGE_MESSAGES"],
     description: "clear messages from a user",
     options: [
         {
