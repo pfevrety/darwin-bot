@@ -2,6 +2,7 @@ module.exports = {
     name: "removelevel",
     type: 1,
     description: "remove level",
+    userPermissions: ["MANAGE_GUILD"],
     options: [
         {
             name: "target",
