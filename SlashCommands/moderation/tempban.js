@@ -7,6 +7,7 @@ const {
 module.exports = {
     name: "tempban",
     description: "tempban someone max (7)",
+    userPermissions: ["BAN_MEMBERS"],
     type: 1,
     options: [
         {
