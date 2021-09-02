@@ -2,6 +2,7 @@ module.exports = {
     name: "removexp",
     type: 1,
     description: "remove xp",
+    userPermissions: ["MANAGE_GUILD"],
     options: [
         {
             name: "target",
