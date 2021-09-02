@@ -2,6 +2,7 @@ module.exports = {
     name: "addxp",
     type: 1,
     description: "add xp",
+    userPermissions: ["MANAGE_GUILD"],
     options: [
         {
             name: "target",
