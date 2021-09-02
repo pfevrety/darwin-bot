@@ -1,7 +1,7 @@
 const { glob } = require("glob");
 const { promisify } = require("util");
 const { Client } = require("discord.js");
-const { mongooseConnectionString } = require("../config.json");
+const { mongooseConnectionString, serverID } = require("../config.json");
 const mongoose = require("mongoose");
 
 const globPromise = promisify(glob);
@@ -39,14 +39,54 @@ module.exports = async (client) => {
         client.slashCommands.set(file.name, file);
 
         if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
+        if (file.userPermissions) file.defaultPermission = false;
         arrayOfSlashCommands.push(file);
     });
     client.on("ready", async () => {
         // Register for a single guild
         await client.guilds.cache
-            .get("810052808584986665")
+            .get(serverID)
             .commands.set(arrayOfSlashCommands);
 
+        const guild = client.guilds.cache.get(serverID);
+        await guild.commands.set(arrayOfSlashCommands).then((cmd) => {
+            const getRoles = (commandName) => {
+                const permissions = arrayOfSlashCommands.find(
+                    (x) => x.name === commandName
+                ).userPermissions;
+
+                if (!permissions) return null;
+                return guild.roles.cache.filter(
+                    (x) => x.permissions.has(permissions) && !x.managed
+                );
+            };
+
+            const fullPermissions = cmd.reduce((accumulator, x) => {
+                const roles = getRoles(x.name);
+                if (!roles) return accumulator;
+
+                const permissions = roles.reduce((a, v) => {
+                    return [
+                        ...a,
+                        {
+                            id: v.id,
+                            type: "ROLE",
+                            permission: true,
+                        },
+                    ];
+                }, []);
+
+                return [
+                    ...accumulator,
+                    {
+                        id: x.id,
+                        permissions,
+                    },
+                ];
+            }, []);
+
+            guild.commands.permissions.set({ fullPermissions });
+        });
         // Register for all the guilds the bot is in
         // await client.application.commands.set(arrayOfSlashCommands);
     });
