@@ -4,6 +4,7 @@ module.exports = {
     name: "unmute",
     description: "unmute someone",
     type: 1,
+    userPermissions: ["MANAGE_ROLES"],
     options: [
         {
             name: "target",
