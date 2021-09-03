@@ -1,4 +1,4 @@
-const canvacord = require("canvacord");
+const Canvacord = require("canvacord");
 const { MessageAttachment } = require("discord.js");
 
 module.exports = {
@@ -40,13 +40,13 @@ module.exports = {
             );
         }
 
-        const rank = new canvacord.Rank()
+        const rank = new Canvacord.Rank()
             .setAvatar(user.user.displayAvatarURL({ format: "png", size: 512 }))
             .setCurrentXP(level.xp) // Current User Xp
             .setRequiredXP(user.client.Levels.xpFor(level.level + 1)) // We calculate the required Xp for the next level
             .setRank(level.position) // Position of the user on the leaderboard
             .setLevel(level.level) // Current Level of the user
-            .setStatus('offline' === null ? 'offline' : user.presence.status) // Current Status of the user
+            .setStatus(user.presence === null ? 'offline' : user.presence.status) // Current Status of the user
             .setProgressBar("#FFFFFF")
             .setUsername(user.user.username)
             .setDiscriminator(user.user.discriminator);
