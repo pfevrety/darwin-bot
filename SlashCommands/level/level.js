@@ -46,7 +46,9 @@ module.exports = {
             .setRequiredXP(user.client.Levels.xpFor(level.level + 1)) // We calculate the required Xp for the next level
             .setRank(level.position) // Position of the user on the leaderboard
             .setLevel(level.level) // Current Level of the user
-            .setStatus(user.presence === null ? 'offline' : user.presence.status) // Current Status of the user
+            .setStatus(
+                user.presence === null ? "offline" : user.presence.status
+            ) // Current Status of the user
             .setProgressBar("#FFFFFF")
             .setUsername(user.user.username)
             .setDiscriminator(user.user.discriminator);
@@ -54,8 +56,8 @@ module.exports = {
         rank.build().then((buffer) => {
             const attachment = new MessageAttachment(buffer, "rank.png");
             const r = interaction.followUp({ files: [attachment] });
-            await setTimeout(() => {
-                return r.delete();
+            setTimeout(() => {
+                r.delete();
             }, 30000);
         });
     },
