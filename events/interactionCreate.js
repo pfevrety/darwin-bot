@@ -6,7 +6,7 @@ client.on("interactionCreate", async (interaction) => {
         await interaction.deferReply({ ephemeral: false }).catch(() => {});
         const cmd = client.slashCommands.get(interaction.commandName);
         if (!cmd)
-            return interaction.followUp({ content: "An error has occured " });
+            return interaction.followUp({ content: "An error ghas occured " });
 
         const args = [];
 
@@ -19,14 +19,21 @@ client.on("interactionCreate", async (interaction) => {
             } else if (option.value) args.push(option.value);
         }
 
-        if (!interaction.inGuild()) return interaction.followUp({content: 'Vous devez executer la commande dans une guild'});
+        if (!interaction.inGuild())
+            return interaction.followUp({
+                content: "Vous devez executer la commande dans une guild",
+            });
 
         if (!interaction.member.permissions.has(cmd.userPermissions || []))
             return interaction.followUp({
                 content: "Tu n'as pas la permission",
             });
 
-        return cmd.run(interaction, args);
+        try {
+            return cmd.run(interaction, args);
+        } catch (err) {
+            interaction.followUp({ content: `il y a eut une erreur ${err}` });
+        }
     }
 
     // Context Menu Handling
