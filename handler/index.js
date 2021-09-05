@@ -31,25 +31,26 @@ module.exports = async (client) => {
     const slashCommands = await globPromise(
         `${process.cwd()}/SlashCommands/*/*.js`
     );
-
     const arrayOfSlashCommands = [];
     slashCommands.map((value) => {
         const file = require(value);
         if (!file?.name) return;
         client.slashCommands.set(file.name, file);
 
-        if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
-        if (file.userPermissions) file.defaultPermission = false;
+        if (["MESSAGE", "USER"].includes(value.type)) delete value.description;
         arrayOfSlashCommands.push(file);
     });
+
     client.on("ready", async () => {
         // Register for a single guild
         // await client.guilds.cache
-        //     .get(serverID)
-        //     .commands.set(arrayOfSlashCommands);
+        //      .get(serverID)
+        //      .commands.set(arrayOfSlashCommands);
 
         // Register for all the guilds the bot is in
-        await client.application.commands.set(arrayOfSlashCommands).then(console.log("done"))
+        await client.application.commands
+            .set(arrayOfSlashCommands)
+            .then(console.log("done"));
     });
 
     // mongoose
