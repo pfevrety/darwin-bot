@@ -53,9 +53,9 @@ module.exports = {
             .setUsername(user.user.username)
             .setDiscriminator(user.user.discriminator);
 
-        rank.build().then((buffer) => {
+        rank.build().then(async (buffer) => {
             const attachment = new MessageAttachment(buffer, "rank.png");
-            const r = interaction.followUp({ files: [attachment] });
+            const r = await interaction.followUp({ files: [attachment] });
             setTimeout(() => {
                 r.delete();
             }, 30000);
