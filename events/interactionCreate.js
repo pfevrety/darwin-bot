@@ -19,7 +19,10 @@ client.on("interactionCreate", async (interaction) => {
             } else if (option.value) args.push(option.value);
         }
 
-        if(!interaction.member.permissions.has(cmd.userPermissions || {})) return interaction.followUp({content: "Tu n'as pas la permission"})
+        if (!interaction.member.permissions.has(cmd.userPermissions || []))
+            return interaction.followUp({
+                content: "Tu n'as pas la permission",
+            });
 
         return cmd.run(interaction, args);
     }
