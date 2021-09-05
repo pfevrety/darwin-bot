@@ -3,7 +3,7 @@ const { MessageEmbed, Message, ColorResolvable, EmojiResolvable } = require('dis
 module.exports = {
     name: "ping",
     description: "returns websocket ping",
-    type: 'CHAT_INPUT',
+    type: '1',
     /**
      *
      * @param {Client} client
