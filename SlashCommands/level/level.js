@@ -54,8 +54,8 @@ module.exports = {
         rank.build().then((buffer) => {
             const attachment = new MessageAttachment(buffer, "rank.png");
             const r = interaction.followUp({ files: [attachment] });
-            return await setTimeout(() => {
-                r.delete();
+            await setTimeout(() => {
+                return r.delete();
             }, 30000);
         });
     },
