@@ -34,6 +34,6 @@ module.exports = {
             amount
         );
 
-        return interaction.followUp({ content: "L'xp a été retirer" });
+        return interaction.followUp({ content: "L'xp a été retiré" });
     },
 };

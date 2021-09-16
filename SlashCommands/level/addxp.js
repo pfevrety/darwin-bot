@@ -35,6 +35,6 @@ module.exports = {
             amount
         );
 
-        interaction.followUp({ content: "L'xp a été ajouter"});
+        interaction.followUp({ content: "L'xp a été ajouté"});
     },
 };

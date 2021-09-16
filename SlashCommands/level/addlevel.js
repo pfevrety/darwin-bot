@@ -35,6 +35,6 @@ module.exports = {
             amount
         );
 
-        interaction.followUp({ content: "Le niveau a été ajouter"});
+        interaction.followUp({ content: "Le niveau a été ajouté!"});
     },
 };
