@@ -22,7 +22,7 @@ module.exports = {
         let embed = new MessageEmbed()
             .setColor("#0099ff")
             .setTitle(`${interaction.guild.name} Leaderboard`)
-            .setDescription(`Classement des utilisateur du serveur \`\`${interaction.guild.name}\`\` en fonction de leur niveau d'experience`)
+            .setDescription(`Classement des utilisateurs du serveur \`\`${interaction.guild.name}\`\` en fonction de leur niveau d'experience`)
             .setTimestamp()
             .setFooter(
                 "Darwin - bot",
