@@ -1,5 +1,7 @@
 const client = require("../index");
 
 client.on("ready", () =>
-    console.log(`${client.user.tag} is up and ready to go!`)
+    client.channels.cache
+        .get(`884041623586086922`)
+        .send(`:gear: Système: Démarrage terminé ! ✅`)
 );
